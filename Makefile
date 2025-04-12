@@ -1,4 +1,4 @@
-.PHONY: build clean install test
+.PHONY: build clean install test lint
 
 BINARY_NAME=notify
 BUILD_DIR=./build
@@ -14,3 +14,6 @@ install: build
 
 test:
 	go test ./...
+
+lint:
+	golangci-lint
