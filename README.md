@@ -12,8 +12,16 @@ Notify is a versatile command-line tool designed to streamline the process of se
 
 ## Installation
 
+### Using Homebrew
+
 ```bash
-go install github.com/yourusername/notify@latest
+brew install sergiorivas/tap/notify
+```
+
+### Using Go
+
+```bash
+go install github.com/sergiorivas/cmd/notify@latest
 ```
 
 ## Usage
