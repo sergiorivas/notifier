@@ -1,6 +1,6 @@
 # Notify - CLI Notification System
 
-Notify is a command-line tool that sends notifications through various means.
+Notify is a versatile command-line tool designed to streamline the process of sending notifications. It supports multiple notification methods, including audio alerts and dialog boxes, making it suitable for a wide range of use cases. Whether you need to deliver success messages, error alerts, or informational updates, Notify provides a customizable and efficient solution.
 
 ## Features
 
@@ -12,39 +12,52 @@ Notify is a command-line tool that sends notifications through various means.
 
 ## Installation
 
+```bash
 go install github.com/yourusername/notify@latest
+```
 
 ## Usage
 
 ### Send a notification
 
+```bash
 notify --type success "Build completed"
 notify --type error --title "Error" "Build failed"
+```
 
 ### Create default configuration with only dialog notifier
 
+```bash
 notify init
 notify init --config-file dialog-only.yaml
 notify init --force # Overwrite existing configuration
+```
 
 ### Use alternative configurations
 
+```bash
 notify --config-file work.yaml "Work notification"
 notify --config-file silent.yaml "Silent notification"
-
+```
 
 ### List available notifier types
 
+```bash
 notify list-notifiers
 notify list-notifiers --verbose # Show detailed information
+```
 
 ### List available configurations
 
+```bash
 notify list-configs
+```
 
 ### Run diagnostics
 
+```bash
 notify diagnose
+```
 
 ### Options
 
@@ -71,9 +84,11 @@ enabledNotifiers:
   - dialog
 dialogSettings:
   title: Notification
-awk
+```
 
-## Add: Installation Script (`install.sh`)
+## Installation Script
+
+Create an installation script (`install.sh`) to simplify the setup process:
 
 ```bash
 #!/bin/bash
@@ -91,3 +106,4 @@ sudo cp build/notify /usr/local/bin/
 echo "Notify installed successfully!"
 echo "Configuration files are in ~/.config/notify/"
 echo "Run 'notify --list-configs' to see available configurations"
+```
