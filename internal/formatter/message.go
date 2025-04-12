@@ -25,5 +25,17 @@ func FormatMessage(message string, notificationType string, isDialog bool) strin
 	if isDialog {
 		return fmt.Sprintf("%s %s", emoji, message)
 	}
-	return fmt.Sprintf("%s, %s", emoji, message)
+
+	// Fixed emojis for each type
+	var prefix string
+	switch notificationType {
+	case "error":
+		prefix = "error"
+	case "warning":
+		prefix = "alert"
+	default:
+		prefix = ""
+	}
+
+	return fmt.Sprintf("%s, %s", prefix, message)
 }
