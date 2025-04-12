@@ -27,7 +27,10 @@ func main() {
 		// Diagnostic subcommand
 		diagnosticCmd := flag.NewFlagSet("diagnose", flag.ExitOnError)
 		diagnosticConfigFile := diagnosticCmd.String("config-file", "", "Configuration file to use (from ~/.config/notify/)")
-		diagnosticCmd.Parse(os.Args[2:])
+		if err := diagnosticCmd.Parse(os.Args[2:]); err != nil {
+			fmt.Fprintf(os.Stderr, "Error parsing diagnose command: %v\n", err)
+			os.Exit(1)
+		}
 
 		cfg, err := config.Load(*diagnosticConfigFile)
 		if err != nil {
@@ -42,7 +45,10 @@ func main() {
 		initCmd := flag.NewFlagSet("init", flag.ExitOnError)
 		initConfigFile := initCmd.String("config-file", "", "Configuration file to create (in ~/.config/notify/)")
 		force := initCmd.Bool("force", false, "Overwrite existing configuration if it exists")
-		initCmd.Parse(os.Args[2:])
+		if err := initCmd.Parse(os.Args[2:]); err != nil {
+			fmt.Fprintf(os.Stderr, "Error parsing init command: %v\n", err)
+			os.Exit(1)
+		}
 
 		// Create dialog-only configuration
 		dialogOnlyConfig := config.Config{
@@ -80,7 +86,10 @@ func main() {
 		// List available notifier types
 		listNotifiersCmd := flag.NewFlagSet("list-notifiers", flag.ExitOnError)
 		verbose := listNotifiersCmd.Bool("verbose", false, "Show detailed information about each notifier")
-		listNotifiersCmd.Parse(os.Args[2:])
+		if err := listNotifiersCmd.Parse(os.Args[2:]); err != nil {
+			fmt.Fprintf(os.Stderr, "Error parsing list-notifiers command: %v\n", err)
+			os.Exit(1)
+		}
 
 		allNotifiers := notifier.GetAllNotifiers()
 
@@ -162,10 +171,13 @@ func main() {
 	title := mainCmd.String("title", "", "Custom title for notification (optional)")
 
 	// Parse the remaining arguments
-	mainCmd.Parse(os.Args[1:])
+	if err := mainCmd.Parse(os.Args[1:]); err != nil {
+		fmt.Fprintf(os.Stderr, "Error parsing main command: %v\n", err)
+		os.Exit(1)
+	}
 
 	// Check if help was requested
-	if mainCmd.NArg() == 0 && *configFlag == false && *configFile == "" && *title == "" && *notificationType == "info" {
+	if mainCmd.NArg() == 0 && !*configFlag && *configFile == "" && *title == "" && *notificationType == "info" {
 		printUsage()
 		return
 	}
