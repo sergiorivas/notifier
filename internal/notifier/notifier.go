@@ -1,6 +1,8 @@
 package notifier
 
 import (
+	"fmt"
+
 	"github.com/sergiorivas/notify/internal/config"
 )
 
@@ -43,4 +45,38 @@ func GetEnabledNotifiers(cfg config.Config) []Notifier {
 	}
 
 	return enabledNotifiers
+}
+
+// Notify sends a notification using the available notifiers.
+// If no configuration file is found, it defaults to dialog and audio notifiers.
+func Notify(message string, notificationType string) {
+	// Attempt to load configuration
+	cfg, err := config.Load("")
+	var notifiers []Notifier
+
+	if err != nil {
+		// Default to dialog and audio if configuration is not found
+		notifiers = []Notifier{
+			&DialogNotifier{},
+			&AudioNotifier{},
+		}
+	} else {
+		// Get enabled notifiers from configuration
+		notifiers = GetEnabledNotifiers(cfg)
+		if len(notifiers) == 0 {
+			// Default to dialog and audio if no notifiers are enabled
+			notifiers = []Notifier{
+				&DialogNotifier{},
+				&AudioNotifier{},
+			}
+		}
+	}
+
+	// Send notification using all available notifiers
+	for _, n := range notifiers {
+		if err := n.Notify(message, notificationType, ""); err != nil {
+			// Log error (can be replaced with proper logging)
+			fmt.Printf("Error notifying with %s: %v\n", n.Name(), err)
+		}
+	}
 }

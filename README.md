@@ -29,36 +29,30 @@ go install github.com/sergiorivas/cmd/notify@latest
 ### Send a notification
 
 ```bash
-notify --type success "Build completed"
-notify --type error --title "Error" "Build failed"
+notify send --type success "Build completed"
+notify send --type error --title "Error" "Build failed"
 ```
 
-### Create default configuration with only dialog notifier
+### Manage configurations
+
+#### List available configurations
 
 ```bash
-notify init
-notify init --config-file dialog-only.yaml
-notify init --force # Overwrite existing configuration
+notify config list
 ```
 
-### Use alternative configurations
+#### Create a default configuration with only dialog notifier
 
 ```bash
-notify --config-file work.yaml "Work notification"
-notify --config-file silent.yaml "Silent notification"
+notify config init
+notify config init --config dialog-only.yaml
+notify config init --force # Overwrite existing configuration
 ```
 
 ### List available notifier types
 
 ```bash
-notify list-notifiers
-notify list-notifiers --verbose # Show detailed information
-```
-
-### List available configurations
-
-```bash
-notify list-configs
+notify notifiers
 ```
 
 ### Run diagnostics
@@ -71,8 +65,7 @@ notify diagnose
 
 - `--type`: Notification type (success, error, info, warning)
 - `--title`: Custom title for the notification
-- `--config-file`: Use a specific configuration file from ~/.config/notify/
-- `--list-configs`: List all available configuration files
+- `--config`: Use a specific configuration file from ~/.config/notify/
 
 ## Configuration
 
@@ -92,26 +85,4 @@ enabledNotifiers:
   - dialog
 dialogSettings:
   title: Notification
-```
-
-## Installation Script
-
-Create an installation script (`install.sh`) to simplify the setup process:
-
-```bash
-#!/bin/bash
-
-# Create configuration directory
-mkdir -p ~/.config/notify
-
-# Copy sample configurations
-cp -n configs/*.yaml ~/.config/notify/
-
-# Build and install
-go build -o build/notify ./cmd/notify
-sudo cp build/notify /usr/local/bin/
-
-echo "Notify installed successfully!"
-echo "Configuration files are in ~/.config/notify/"
-echo "Run 'notify --list-configs' to see available configurations"
 ```
